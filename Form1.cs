@@ -26,7 +26,7 @@ namespace Kursova
 
         private void addBtn_Click(object sender, EventArgs e)
         {
-            list = createPersonList();
+            List = createPersonList();
             fillData();
         }
 
@@ -43,19 +43,7 @@ namespace Kursova
         {
             List<Company> companies = createCompamyList();
 
-            //Person obj = new Person(1, "Tom", "Henderson", new DateTime(1970, 8, 30), companies[0].Id);
-            //Person obj2 = new Person(2, "Rob", "Stark", new DateTime(1990, 7, 20), companies[0].Id);
-            //Person obj3 = new Person(3, "Anna", "Potts", new DateTime(1991, 1, 12), companies[1].Id);
-            //Person obj4 = new Person(4, "Jeff", "Crabs", new DateTime(1984, 5, 14), companies[1].Id);
-            //Person obj5 = new Person(5, "Bob", "Downey", new DateTime(1996, 3, 16), companies[0].Id);
-
             List<Person> list = new List<Person>();
-
-            //list.Add(obj);
-            //list.Add(obj2);
-            //list.Add(obj3);
-            //list.Add(obj4);
-            //list.Add(obj5);
 
             string jsonString;
             string path = "user.json";
@@ -85,34 +73,35 @@ namespace Kursova
             return companyList;
         }
 
-        public static List<Person> list = createPersonList();
-        public static List<Company> companies = createCompamyList();
+        public List<Person> List = createPersonList();
+        public List<Company> Companies = createCompamyList();
 
         bool desc = false;
         string name = "";
 
-        public static void addToList(Person person)
+        public void addToList(Person person)
         {
             string path = "user.json";
-            list.Add(person);
-            writeJson(list, path);
+            List.Add(person);
+            writeJson(List, path);
+            List = createPersonList();
+            fillData();
         }
 
         public void TimSort(bool desc)
         {
-            int n = list.Count;
-
             TimSort obj = new TimSort();
+
+            int n = List.Count;
 
             if (desc == true)
             {
-                obj.timSort(list, n);
+                obj.timSort(List, n);
             }
-            else obj.timSort2(list, n);
+            else obj.timSort2(List, n);
 
             fillData();
         }
-
 
         public void GapSort(bool desc)
         {
@@ -120,9 +109,12 @@ namespace Kursova
 
             if (desc == true)
             {
-                obj.combSortDesc(list);
+                obj.combSort(List, desc);
             }
-            else obj.combSortAsc(list);
+            else
+            {
+                obj.combSort(List, desc);
+            }
 
             fillData();
         }
@@ -131,15 +123,15 @@ namespace Kursova
         {
             Filtering obj = new Filtering();
 
-            List<Person> slist = list;
+            List<Person> slist = List;
 
-            slist = obj.getFiltered(list, name, company);
+            List = obj.getFiltered(List, name, company);
 
             dataGridView1.Rows.Clear();
 
             foreach (Person elem in slist)
             {
-                string companyName = companies[elem.CompanyId - 1].Name;
+                string companyName = Companies[elem.CompanyId - 1].Name;
 
                 string[] row = { $"{elem.Id}", $"{elem.Name}", $"{elem.Surname}", $"{elem.BirthDate.ToString("d")}", $"{companyName.ToString()}" };
 
@@ -151,10 +143,10 @@ namespace Kursova
         {
             dataGridView1.Rows.Clear();
 
-            foreach (Person elem in list)
+            foreach (Person elem in List)
             {
 
-                string companyName = companies[elem.CompanyId - 1].Name;
+                string companyName = Companies[elem.CompanyId - 1].Name;
 
                 string[] row = { $"{elem.Id}", $"{elem.Name}", $"{elem.Surname}", $"{elem.BirthDate.ToString("d")}", $"{companyName.ToString()}" };
 
@@ -162,14 +154,9 @@ namespace Kursova
             }
         }
 
-        private void gapBtn_Click(object sender, EventArgs e)
-        {
-            GapSort(desc);
-        }
-
         private void fillBtn_Click(object sender, EventArgs e)
         {
-            list = createPersonList();
+            List = createPersonList();
             fillData();
         }
 
@@ -195,7 +182,7 @@ namespace Kursova
 
             int value = Convert.ToInt32(numYear.Value);
 
-            List<Person> dlist = list;
+            List<Person> dlist = List;
 
             List<Person> slist = new List<Person>();
 
@@ -220,7 +207,7 @@ namespace Kursova
 
             foreach (Person elem in slist)
             {
-                string companyName = companies[elem.CompanyId - 1].Name;
+                string companyName = Companies[elem.CompanyId - 1].Name;
 
                 string[] row = { $"{elem.Id}", $"{elem.Name}", $"{elem.Surname}", $"{elem.BirthDate.ToString("d")}", $"{companyName}" };
 
@@ -232,7 +219,7 @@ namespace Kursova
         {
             string c = comboBox1.Text;
 
-            int id = companies.Where(x => x.Name == c).Select(x => x.Id).FirstOrDefault();
+            int id = Companies.Where(x => x.Name == c).Select(x => x.Id).FirstOrDefault();
 
             if (String.IsNullOrEmpty(textBox1.Text) && String.IsNullOrEmpty(comboBox1.Text))
             {
@@ -257,7 +244,7 @@ namespace Kursova
         private void comboBox1_SelectedIndexChanged_1(object sender, EventArgs e)
         {
             string c = comboBox1.Text;
-            int id = companies.Where(x => x.Name == c).Select(x => x.Id).FirstOrDefault();
+            int id = Companies.Where(x => x.Name == c).Select(x => x.Id).FirstOrDefault();
 
             if (comboBox1.Text == "Any")
             {
@@ -280,7 +267,7 @@ namespace Kursova
             deletePerson(id);
         }
 
-        private static void deletePerson(int id)
+        private void deletePerson(int id)
         {
             List<Person> list = new List<Person>();
 
@@ -299,6 +286,10 @@ namespace Kursova
             list.Remove(match);
 
             writeJson(list, path);
+
+            List = createPersonList();
+            fillData();
+
         }
 
 
@@ -336,5 +327,10 @@ namespace Kursova
         {
 
         }
+        private void gapBtn_Click(object sender, EventArgs e)
+        {
+            GapSort(desc);
+        }
+
     }
 }

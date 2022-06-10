@@ -33,6 +33,11 @@ namespace WinFormsApp1
             return "The quick brown fox jumped over the lazy dog";
         }
 
+        private void idBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
         private void addBtn_Click(object sender, EventArgs e)
         {
             int id = Int32.Parse(idBox.Text);
@@ -41,19 +46,16 @@ namespace WinFormsApp1
             DateTime dt = datePick.Value.Date;
             int company = Int32.Parse(cBox.Text);
 
-            var match = Form1.list.Where(c => c.Id == id);
+            var match = form1.List.Where(c => c.Id == id);
 
-            if (!string.IsNullOrEmpty(name) && !string.IsNullOrEmpty(sur)
-                && id != null && company != null && dt != null && match == null)
+            if (id != null && string.IsNullOrEmpty(name) == false &&
+                string.IsNullOrEmpty(sur) == false && dt != DateTime.MinValue
+                && company != null)
             {
                 Person p = new Person(id, name, sur, dt, company);
-                Form1.addToList(p);
+                form1.addToList(p);
             }
-        }
-
-        private void idBox_TextChanged(object sender, EventArgs e)
-        {
-
+            
         }
     }
 }

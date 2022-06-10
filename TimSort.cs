@@ -10,7 +10,7 @@ namespace Kursova
 { 
     public class TimSort
     {
-        public const int RUN = 32;
+        public const int RUN = 512;
 
         public static void insertionSort(List<Person> arr,
                                     int left, int right)
@@ -154,43 +154,23 @@ namespace Kursova
             }
         }
 
-        // Iterative Timsort function to sort the
-        // array[0...n-1] (similar to merge sort)
         public void timSort(List<Person> arr, int n)
         {
-
-            // Sort individual subarrays of size RUN
             for (int i = 0; i < n; i += RUN)
                 insertionSort(arr, i,
                              Math.Min((i + RUN - 1), (n - 1)));
 
-            // Start merging from size RUN (or 32).
-            // It will merge
-            // to form size 64, then
-            // 128, 256 and so on ....
             for (int size = RUN; size < n;
                                      size = 2 * size)
-            {
-                // Pick starting point of
-                // left sub array. We
-                // are going to merge
-                // arr[left..left+size-1]
-                // and arr[left+size, left+2*size-1]
-                // After every merge, we increase
-                // left by 2*size
+            { 
                 for (int left = 0; left < n;
                                       left += 2 * size)
                 {
 
-                    // Find ending point of left sub array
-                    // mid+1 is starting point of
-                    // right sub array
                     int mid = left + size - 1;
                     int right = Math.Min((left +
                                         2 * size - 1), (n - 1));
 
-                    // Merge sub array arr[left.....mid] &
-                    // arr[mid+1....right]
                     if (mid < right)
                         merge(arr, left, mid, right);
                 }
@@ -200,39 +180,21 @@ namespace Kursova
 
         public void timSort2(List<Person> arr, int n)
         {
-
-            // Sort individual subarrays of size RUN
             for (int i = 0; i < n; i += RUN)
                 insertionSort2(arr, i,
                              Math.Min((i + RUN - 1), (n - 1)));
 
-            // Start merging from size RUN (or 32).
-            // It will merge
-            // to form size 64, then
-            // 128, 256 and so on ....
             for (int size = RUN; size < n;
                                      size = 2 * size)
             {
-                // Pick starting point of
-                // left sub array. We
-                // are going to merge
-                // arr[left..left+size-1]
-                // and arr[left+size, left+2*size-1]
-                // After every merge, we increase
-                // left by 2*size
+
                 for (int left = 0; left < n;
                                       left += 2 * size)
                 {
-
-                    // Find ending point of left sub array
-                    // mid+1 is starting point of
-                    // right sub array
                     int mid = left + size - 1;
                     int right = Math.Min((left +
                                         2 * size - 1), (n - 1));
 
-                    // Merge sub array arr[left.....mid] &
-                    // arr[mid+1....right]
                     if (mid < right)
                         merge2(arr, left, mid, right);
                 }

@@ -8,88 +8,63 @@ namespace Kursova
 {
     class GapSort
     {
-        public static int getNextGap(int gap)
+        public static int getNextGap(int gap) //допоміжна функція
         {
-            // Shrink gap by Shrink factor
+            // Обрахунок проміжку 
             gap = (gap * 10) / 13;
             if (gap < 1)
                 return 1;
             return gap;
         }
 
-        public void combSortDesc(List<Person> arr)
+        public void combSort(List<Person> arr , bool desc)
         {
             int n = arr.Count;
 
-            // initialize gap
             int gap = n;
 
-            // Initialize swapped as true to
-            // make sure that loop runs
+            // Встановимо перестановку на true щоб запустити цикл
             bool swapped = true;
 
-            // Keep running while gap is more than
-            // 1 and last iteration caused a swap
+            // Цикл відбувається допоки проміжок більший за 1
+            // та ітерація виконує хоча б одну підстановку
             while (gap != 1 || swapped == true)
             {
-                // Find next gap
+                // Обчислити проміжок
                 gap = getNextGap(gap);
 
-                // Initialize swapped as false so that we can
-                // check if swap happened or not
+                // Встановлюємо false для з'яснування
+                // предмету здійснення перестановки
                 swapped = false;
 
-                // Compare all elements with current gap
+                // Порівняння усіх елементів з даним проміжком
                 for (int i = 0; i < n - gap; i++)
                 {
-                    if (arr[i].BirthDate > arr[i + gap].BirthDate)
+                    if (desc == true) //за спаданням
                     {
-                        // Swap arr[i] and arr[i+gap]
-                        Person temp = arr[i];
-                        arr[i] = arr[i + gap];
-                        arr[i + gap] = temp;
+                        if (arr[i].BirthDate > arr[i + gap].BirthDate)
+                        {
+                            // Перестановка arr[i] і arr[i+gap]
+                            Person temp = arr[i];
+                            arr[i] = arr[i + gap];
+                            arr[i + gap] = temp;
 
-                        // Set swapped
-                        swapped = true;
+                            // Засвідчення здійснення перестановки
+                            swapped = true;
+                        }
                     }
-                }
-            }
-        }
-
-        public void combSortAsc(List<Person> arr)
-        {
-            int n = arr.Count;
-
-            // initialize gap
-            int gap = n;
-
-            // Initialize swapped as true to
-            // make sure that loop runs
-            bool swapped = true;
-
-            // Keep running while gap is more than
-            // 1 and last iteration caused a swap
-            while (gap != 1 || swapped == true)
-            {
-                // Find next gap
-                gap = getNextGap(gap);
-
-                // Initialize swapped as false so that we can
-                // check if swap happened or not
-                swapped = false;
-
-                // Compare all elements with current gap
-                for (int i = 0; i < n - gap; i++)
-                {
-                    if (arr[i].BirthDate < arr[i + gap].BirthDate)
+                    else //за зростанням
                     {
-                        // Swap arr[i] and arr[i+gap]
-                        Person temp = arr[i];
-                        arr[i] = arr[i + gap];
-                        arr[i + gap] = temp;
+                        if (arr[i].BirthDate < arr[i + gap].BirthDate)
+                        {
+                            
+                            Person temp = arr[i];
+                            arr[i] = arr[i + gap];
+                            arr[i + gap] = temp;
 
-                        // Set swapped
-                        swapped = true;
+                           
+                            swapped = true;
+                        }
                     }
                 }
             }
